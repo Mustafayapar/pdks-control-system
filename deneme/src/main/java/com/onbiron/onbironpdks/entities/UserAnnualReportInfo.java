@@ -4,6 +4,8 @@ import java.time.LocalDateTime;
 
 import org.springframework.web.bind.annotation.CrossOrigin;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -26,9 +28,11 @@ public class UserAnnualReportInfo {
     @JoinColumn(name = "user_id", referencedColumnName = "id", nullable = false)
     private Users userId;
 
+    @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
     @Column(name = "start_date", nullable = false)
     private LocalDateTime startDate;
 
+    @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
     @Column(name = "stop_date", nullable = false)
     private LocalDateTime stopDate;
 
@@ -49,8 +53,10 @@ public class UserAnnualReportInfo {
     	
     }
     
+  
+
     public UserAnnualReportInfo(Long id, Users userId, LocalDateTime startDate, LocalDateTime stopDate,
-			LocalDateTime creationTime, Boolean isDeleted, CodeConstant annualReportTypeId) {
+			LocalDateTime creationTime, Boolean isDeleted, Boolean isLeave, CodeConstant annualReportTypeId) {
 		super();
 		this.id = id;
 		this.userId = userId;
@@ -58,12 +64,25 @@ public class UserAnnualReportInfo {
 		this.stopDate = stopDate;
 		this.creationTime = creationTime;
 		this.isDeleted = isDeleted;
+		this.isLeave = isLeave;
 		this.annualReportTypeId = annualReportTypeId;
 	}
 
 	// Getters and Setters
 
-    public Long getId() {
+	public Boolean getIsLeave() {
+		return isLeave;
+	}
+
+
+
+	public void setIsLeave(Boolean isLeave) {
+		this.isLeave = isLeave;
+	}
+
+
+
+	public Long getId() {
         return id;
     }
 

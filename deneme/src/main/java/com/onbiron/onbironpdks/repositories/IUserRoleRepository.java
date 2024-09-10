@@ -14,12 +14,13 @@ import com.onbiron.onbironpdks.entities.UserRole;
 import com.onbiron.onbironpdks.entities.Users;
 
 public interface IUserRoleRepository extends JpaRepository<UserRole, Long> {
-	
-	public UserRole findByUserId(Users userId);
-	
+    
+	public abstract UserRole findByUserIdAndIsDeleted(Users user, Boolean isDeleted);
+
 	//public List<UserRole> findByRoleId(Long roleId);
 	
-	public List<UserRole> findByRoleId(CodeConstant roleId);
+    List<UserRole> findByRoleIdAndIsDeleted(CodeConstant roleId, Boolean isDeleted);
+	
 	public Page<UserRole> findAllByIsDeleted(Boolean isDeleted, Pageable pageable);
 	
 	public List<UserRole> findAllByIsDeleted(Boolean isDeleted);

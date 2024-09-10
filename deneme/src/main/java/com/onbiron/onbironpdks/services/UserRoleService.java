@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 import com.onbiron.onbironpdks.entities.CodeConstant;
 import com.onbiron.onbironpdks.entities.UserRole;
 import com.onbiron.onbironpdks.entities.Users;
+import com.onbiron.onbironpdks.enums.ParentIdType;
 import com.onbiron.onbironpdks.interfaceservices.IUserRoleService;
 import com.onbiron.onbironpdks.repositories.ICodeConstantRepository;
 import com.onbiron.onbironpdks.repositories.IUserRepository;
@@ -38,11 +39,11 @@ public class UserRoleService implements IUserRoleService {
 
 
 	@Override
-	public List<UserRole> getUsersByRoleIdS(Long parentId) {
-		CodeConstant codeConstant = codeConstantRepository.getByParentId(parentId)
+	public List<UserRole> getUsersByRoleIdS(long parentId) {
+		CodeConstant codeConstant = codeConstantRepository.getByParentIdAndIsDeleted(parentId,false)
                 .orElseThrow(() -> new RuntimeException("Role not found"));
 
-            List<UserRole> userRole = userRoleRepository.findByRoleId(codeConstant);
+            List<UserRole> userRole = userRoleRepository.findByRoleIdAndIsDeleted(codeConstant,false);
             return userRole;
 	
 	}
@@ -88,6 +89,37 @@ public class UserRoleService implements IUserRoleService {
 	        return createdUserRole;
 	 }
 
+	@Override
+    public UserRole updateById(Long id, Map<String, Object> payload){
+		 // Retrieve the existing record by ID
+		// Retrieve the existing UserRole by ID
+	    UserRole existingUserRole = userRoleRepository.findById(id)
+	            .orElseThrow(() -> new RuntimeException("UserRole not found with id: " + id));
+
+	    // Update the fields of the existingUserRole based on the payload
+	    if (payload.containsKey("userId")) {
+	        Long userId = ((Number) payload.get("userId")).longValue();
+	        Users user = userRepository.findById(userId)
+		            .orElseThrow(() -> new RuntimeException("User not found"));
+	        existingUserRole.setUserId(user);
+	    }
+
+	    if (payload.containsKey("roleId")) {
+	        Long roleId = ((Number) payload.get("roleId")).longValue();
+
+		    CodeConstant role = codeConstantRepository.findById(roleId)
+		            .orElseThrow(() -> new RuntimeException("Role not found"));
+	        existingUserRole.setCodeConstant(role); // Assuming roleId maps to codeConstant
+	    }
+
+	    
+
+	    // Add more fields as necessary, depending on what can be updated in your entity
+
+	    // Save the updated UserRole entity
+	    return userRoleRepository.save(existingUserRole);
+         
+    }
 
 
 	@Override
@@ -107,22 +139,7 @@ public class UserRoleService implements IUserRoleService {
 
 
 
-	@Override
-    public UserRole updateById(Long id, UserRole newUserRole){
-		 // Retrieve the existing record by ID
-        UserRole existingUserRole = userRoleRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("UserRole not found with id: " + id));
-
-        // Update the fields of the existing record with new values
-        existingUserRole.setId(newUserRole.getId());
-        existingUserRole.setUserId(newUserRole.getUserId());
-        existingUserRole.setCreationTime(newUserRole.getCreationTime());
-        existingUserRole.setIsDeleted(newUserRole.getIsDeleted());
-
-        // Save the updated record
-        return userRoleRepository.save(existingUserRole);
-    }
-
+	
 
 
 	@Override
@@ -130,7 +147,7 @@ public class UserRoleService implements IUserRoleService {
 		Users user = userRepository.findById(userId)
                 .orElseThrow(() -> new RuntimeException("User not found"));
 
-                UserRole userRoles = userRoleRepository.findByUserId(user);
+                UserRole userRoles = userRoleRepository.findByUserIdAndIsDeleted(user,false);
                 return userRoles;
 	}
 

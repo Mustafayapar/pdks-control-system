@@ -18,7 +18,12 @@ public interface IUserAnnualReportInfoRepository extends JpaRepository<UserAnnua
 	
 	public List<UserAnnualReportInfo> findAllByIsDeleted(Boolean isDeleted);
 	
+	public List<UserAnnualReportInfo> findByIsDeletedAndIsLeave(Boolean isDeleted,Boolean isLeave);
+	
 	public Page<UserAnnualReportInfo> findAllByIsDeleted(Boolean isDeleted, Pageable pageable);
+	
+	@Query("SELECT COUNT(u) FROM UserAnnualReportInfo u WHERE u.isLeave = true")
+	public long countByIsDeletedAndIsLeave(Boolean isDeleted, Boolean isLeave);
 
 	 @Query("SELECT u FROM UserAnnualReportInfo u WHERE " +
 			    "LOWER(CAST(u.id AS string)) LIKE LOWER(CONCAT('%', :searchTerm, '%')) OR " +

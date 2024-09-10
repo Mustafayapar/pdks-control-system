@@ -25,4 +25,7 @@ public interface IUserRemainingAnnualInfoService {
 	public List<UserRemainingAnnualInfo> search(String searchTerm);
 
 	public Page<UserRemainingAnnualInfo> getAllRemainingAnnualInfoPageS(int page, int rowsPerPage);
+	
+	//public List<UserRemainingAnnualInfo> updateRemainingLeaves(List<UserRemainingAnnualInfo> userRemainingInfo);
+	
 }

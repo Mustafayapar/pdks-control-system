@@ -91,7 +91,7 @@ public class UserRemainingAnnualInfoController {
     }
 
     // Belirli bir kalan yıllık izin bilgisini silen API
-    @DeleteMapping("/delete/{id}")
+    @PutMapping("/delete/{id}")
     public ResponseEntity<UserRemainingAnnualInfo> deleteRemainingInfo(@PathVariable Long id) {
         try {
             UserRemainingAnnualInfo deletedInfo = userRemainingAnnualInfoService.deleteRemainingInfoS(id);
