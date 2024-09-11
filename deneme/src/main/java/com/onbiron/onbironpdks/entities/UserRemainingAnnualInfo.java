@@ -51,7 +51,7 @@ public class UserRemainingAnnualInfo {
 		this.remainingAnnualLeave = remainingAnnualLeave;
 		this.remainingExcusedLeave = remainingExcusedLeave;
 		this.creationTime = creationTime;
-		this.isDeleted = isDeleted;
+		this.isDeleted = isDeleted;  
 	}
 
 	// Getters and Setters

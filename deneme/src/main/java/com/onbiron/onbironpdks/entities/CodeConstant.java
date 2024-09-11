@@ -5,9 +5,13 @@ import java.util.List;
 
 import org.springframework.web.bind.annotation.CrossOrigin;
 
+import com.onbiron.onbironpdks.enums.ParentIdType;
+
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -25,8 +29,9 @@ public class CodeConstant {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "parent_id")
-    private Long parentId;
+    // Use EnumType.STRING to store the enum's name in the database (optional)
+     @Column(name = "parent_id")
+    private long parentId;
 
 	@Column(name = "name")
     private String name;
@@ -53,15 +58,25 @@ public class CodeConstant {
     	
     }
     
-    public CodeConstant(Long id, Long parentId, String name, String explanation, LocalDateTime creationTime,
+    public CodeConstant(Long id, ParentIdType parentIdType, String explanation, LocalDateTime creationTime,
 			Boolean isDeleted) {
 		this.id = id;
-		this.parentId = parentId;
-		this.name = name;
+		this.parentId = parentIdType.getParentId();
+	    this.name = parentIdType.getName();
 		this.explanation = explanation;
 		this.creationTime = creationTime;
 		this.isDeleted = isDeleted;
 	}
+  
+
+    public ParentIdType getParentIdType() {
+        return ParentIdType.fromParentId(this.parentId);
+    }
+
+    public void setParentIdType(ParentIdType parentIdType) {
+        this.parentId = parentIdType.getParentId();
+        this.name = parentIdType.getName();
+    }
 
     // Getters and Setters
 
@@ -73,21 +88,22 @@ public class CodeConstant {
         this.id = id;
     }
 
-    public Long getParentId() {
-        return parentId;
-    }
-
-    public void setParentId(Long parentId) {
-        this.parentId = parentId;
-    }
-
     public String getName() {
         return name;
     }
-
     public void setName(String name) {
         this.name = name;
     }
+
+    public long getParentId() {
+        return parentId;
+    }
+
+    public void setParentId(long parentId) {
+        this.parentId = parentId;
+    }
+
+	
 
     public String getExplanation() {
         return explanation;

@@ -1,6 +1,8 @@
 package com.onbiron.onbironpdks.controllers;
 
+import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -40,17 +42,17 @@ public class UserAnnualReportInfoController {
 
 	// Tüm kullanıcı yıllık rapor bilgilerini getiren API Pagenable olmadığı için kullanılmıyor
     
-//    @GetMapping("/findall")
-//    public ResponseEntity<List<UserAnnualReportInfo>> getAllUserAnnualReport() {
-//        List<UserAnnualReportInfo> reports = userAnnualReportInfoService.getAllUserAnnualReportS();
-//        if (reports.isEmpty()) {
-//            logger.info("No annual reports found");
-//            return ResponseEntity.notFound().build();
-//        } else {
-//            logger.info("Returning all annual reports");
-//            return ResponseEntity.ok(reports);
-//        }
-//    }
+    @GetMapping("/")
+    public ResponseEntity<List<UserAnnualReportInfo>> getAllUserAnnualReport() {
+    	List<UserAnnualReportInfo> reports = userAnnualReportInfoService.getAllUserAnnualReportS();
+        if (reports.isEmpty()) {
+            logger.info("No annual reports found");
+            return ResponseEntity.notFound().build();
+        } else {
+            logger.info("Returning all annual reports");
+            return ResponseEntity.ok(reports);
+        }
+    }
     
     @GetMapping("/findall")
     public ResponseEntity<Page<UserAnnualReportInfo>> getAllUserAnnualReportPagenable(@RequestParam int page, @RequestParam int rowsPerPage) {
@@ -79,9 +81,10 @@ public class UserAnnualReportInfoController {
 
     // Yeni bir kullanıcı yıllık rapor bilgisi oluşturan API
     @PostMapping("/create")
-    public ResponseEntity<UserAnnualReportInfo> createUserAnnReportInfo(@RequestBody UserAnnualReportInfo newUserAnnReportInfo) {
+    public ResponseEntity<UserAnnualReportInfo> createUserAnnReportInfo(@RequestBody  Map<String, Object> payload) {
         try {
-            UserAnnualReportInfo createdReport = userAnnualReportInfoService.createUserAnnReportInfoS(newUserAnnReportInfo);
+            UserAnnualReportInfo createdReport = userAnnualReportInfoService.createUserAnnReportInfoS(payload);
+            System.out.println("geldi");
             logger.info("Created new annual report with ID {}", createdReport.getId());
             return ResponseEntity.status(HttpStatus.CREATED).body(createdReport);
         } catch (Exception e) {
@@ -109,7 +112,7 @@ public class UserAnnualReportInfoController {
     }
 
     // Belirli bir kullanıcı yıllık rapor bilgisini silen API
-    @DeleteMapping("/delete/{id}")
+    @PutMapping("/delete/{id}")
     public ResponseEntity<UserAnnualReportInfo> deleteUserAnnReportInfo(@PathVariable Long id) {
         try {
             UserAnnualReportInfo deletedReport = userAnnualReportInfoService.deleteUserAnnReportInfoS(id);
@@ -129,5 +132,27 @@ public class UserAnnualReportInfoController {
     @GetMapping("/search/{term}")
     public List<UserAnnualReportInfo> search(@PathVariable("term") String term) {
         return userAnnualReportInfoService.search(term);
+    }
+    
+    @GetMapping("/leavereports")
+    public ResponseEntity<List<UserAnnualReportInfo>> getIsLeaveUserAnnualReportS() {
+        try {
+            List<UserAnnualReportInfo> reports = userAnnualReportInfoService.getIsLeaveUserAnnualReportS();
+            return ResponseEntity.ok(reports);
+        } catch (Exception e) {
+            // Log the exception as needed
+            return ResponseEntity.status(500).body(Collections.emptyList());
+        }
+    }
+
+    @GetMapping("/countreports")
+    public ResponseEntity<Long> countUserAnnualReportInfoIsLeaveS() {
+        try {
+            long count = userAnnualReportInfoService.countUserAnnualReportInfoIsLeaveS();
+            return ResponseEntity.ok(count);
+        } catch (Exception e) {
+            // Log the exception as needed
+            return ResponseEntity.status(500).body(0L);
+        }
     }
 }

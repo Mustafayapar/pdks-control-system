@@ -12,13 +12,14 @@ import org.springframework.data.repository.query.Param;
 
 import com.onbiron.onbironpdks.entities.CodeConstant;
 import com.onbiron.onbironpdks.entities.Users;
+import com.onbiron.onbironpdks.enums.ParentIdType;
 
 public interface ICodeConstantRepository extends JpaRepository<CodeConstant, Long> {
-	
-	public Optional<CodeConstant> getByParentId(Long parentId);
+	@Query("SELECT c FROM CodeConstant c WHERE c.parentId = :parentId AND c.isDeleted = :isDeleted")
+    Optional<CodeConstant> getByParentIdAndIsDeleted(@Param("parentId") Long parentId, @Param("isDeleted") Boolean isDeleted);
 	 
 
-	public List<CodeConstant> findByParentId(Long parentId);
+	public List<CodeConstant> findByParentIdAndIsDeleted(long parentId, Boolean isDeleted);
 	
 	public List<CodeConstant> findAllByIsDeleted(Boolean isDeleted);
 	
@@ -32,5 +33,8 @@ public interface ICodeConstantRepository extends JpaRepository<CodeConstant, Lon
 			  
 			 	"LOWER(CAST(u.creationTime AS string)) LIKE LOWER(CONCAT('%', :searchTerm, '%'))")
 			public List<CodeConstant> searchByTerm( @Param("searchTerm") String searchTerm);
+	 
+	 @Query("SELECT c FROM CodeConstant c WHERE c.parentId IN :parentIds AND c.isDeleted = :isDeleted")
+	    List<CodeConstant> findByParentIdsAndIsDeleted(@Param("parentIds") List<Long> parentIds,boolean isDeleted);
 	 
 }

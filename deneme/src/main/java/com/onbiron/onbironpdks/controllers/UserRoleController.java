@@ -22,6 +22,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.onbiron.onbironpdks.entities.UserRole;
 import com.onbiron.onbironpdks.entities.Users;
+import com.onbiron.onbironpdks.enums.ParentIdType;
 import com.onbiron.onbironpdks.services.UserRoleService;	
 
 @RestController
@@ -43,13 +44,13 @@ public class UserRoleController {
 
     // Belirli bir rol ID'sine sahip tüm kullanıcı rollerini getiren API
     @GetMapping("/findbyrole/{roleId}")
-    public ResponseEntity<List<UserRole>> getUsersByRoleId(@PathVariable Long roleId) {
-        List<UserRole> userRoles = userRoleService.getUsersByRoleIdS(roleId);
+    public ResponseEntity<List<UserRole>> getUsersByRoleId(@PathVariable long parentId) {
+        List<UserRole> userRoles = userRoleService.getUsersByRoleIdS(parentId);
         if (userRoles.isEmpty()) {
-            logger.warn("No user roles found for Role ID {}", roleId);
+            logger.warn("No user roles found for Role ID {}", parentId);
             return ResponseEntity.notFound().build();
         } else {
-            logger.info("Returning user roles for Role ID {}", roleId);
+            logger.info("Returning user roles for Role ID {}", parentId);
             return ResponseEntity.ok(userRoles);
         }
     }
@@ -79,6 +80,16 @@ public class UserRoleController {
              return ResponseEntity.status(500).body(null); // Customize error handling as needed
          }
        }
+    
+    // Belirli bir kullanıcı rolünü güncelleyen API
+    @PutMapping("/update/{id}")
+    public ResponseEntity<UserRole> updateByIdApi(@PathVariable Long id, @RequestBody Map<String, Object> payload){
+        UserRole userRole = userRoleService.updateById(id, payload);
+    if(userRole == null){
+        return ResponseEntity.notFound().build();
+    }else
+    return ResponseEntity.ok(userRole);
+    }
 
     // Belirli bir kullanıcı rolünü silen API
     @PutMapping("/delete/{id}")
@@ -98,15 +109,7 @@ public class UserRoleController {
         }
     }
 
-    // Belirli bir kullanıcı rolünü güncelleyen API
-    @PutMapping("/update/{id}")
-    public ResponseEntity<UserRole> updateByIdApi(@PathVariable Long id, @RequestBody UserRole newUserRole){
-        UserRole userRole = userRoleService.updateById(id, newUserRole);
-    if(userRole == null){
-        return ResponseEntity.notFound().build();
-    }else
-    return ResponseEntity.ok(userRole);
-    }
+   
     
     @GetMapping("/search/{term}")
     public List<UserRole> search(@PathVariable("term") String term) {

@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.onbiron.onbironpdks.entities.CodeConstant;
 import com.onbiron.onbironpdks.entities.UserRole;
+import com.onbiron.onbironpdks.enums.ParentIdType;
 import com.onbiron.onbironpdks.services.CodeConstantService;
 
 @RestController
@@ -139,7 +140,7 @@ public class CodeConstantController {
 
 	    // Parent ID'ye göre CodeConstant getirir
 	    @GetMapping("/findbyparent/{parentId}")
-	    public ResponseEntity<List<CodeConstant>>  getByParentIdCodeConstant(@PathVariable Long parentId) {
+	    public ResponseEntity<List<CodeConstant>>  getByParentIdCodeConstant(@PathVariable long parentId) {
 	        try {
 	        	List<CodeConstant> codeConstant = codeConstantService.getByParentIdCodeConstant(parentId);
 	            if (codeConstant == null) {
@@ -151,6 +152,22 @@ public class CodeConstantController {
 	            }
 	        } catch (Exception e) {
 	            logger.error("Error retrieving CodeConstant for Parent ID {}: {}", parentId, e.getMessage());
+	            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+	        }
+	    }
+	    @GetMapping("/findbyparents")
+	    public ResponseEntity<List<CodeConstant>>  getByParentIdsCodeConstant(@RequestParam  List<Long> parentIds) {
+	        try {
+	        	List<CodeConstant> codeConstant = codeConstantService.getByParentIdsCodeConstant(parentIds);
+	            if (codeConstant == null) {
+	                logger.info("CodeConstant not found for Parent ID {}", parentIds);
+	                return ResponseEntity.notFound().build();
+	            } else {
+	                logger.info("Returning CodeConstant for Parent ID {}", parentIds);
+	                return ResponseEntity.ok(codeConstant);
+	            }
+	        } catch (Exception e) {
+	            logger.error("Error retrieving CodeConstant for Parent ID {}: {}", parentIds, e.getMessage());
 	            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
 	        }
 	    }

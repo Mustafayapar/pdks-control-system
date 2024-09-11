@@ -15,6 +15,7 @@ import com.onbiron.onbironpdks.entities.UserRemainingAnnualInfo;
 import com.onbiron.onbironpdks.entities.UserRole;
 import com.onbiron.onbironpdks.entities.Users;
 import com.onbiron.onbironpdks.interfaceservices.IUserRemainingAnnualInfoService;
+import com.onbiron.onbironpdks.repositories.IUserAnnualReportInfoRepository;
 import com.onbiron.onbironpdks.repositories.IUserRemainingAnnualInfoRepository;
 import com.onbiron.onbironpdks.repositories.IUserRepository;
 
@@ -24,11 +25,13 @@ public class UserRemainingAnnualInfoService implements IUserRemainingAnnualInfoS
 	private final IUserRemainingAnnualInfoRepository userRemainingAnnInfoRepository;
     private static final Logger logger = LoggerFactory.getLogger(UserRemainingAnnualInfoService.class);
     private final IUserRepository userRepository;
+    private final IUserAnnualReportInfoRepository reportInfoRepository;
 
 	
-	public UserRemainingAnnualInfoService(IUserRemainingAnnualInfoRepository userRemainingAnnInfoRepository,  IUserRepository userRepository) {
+	public UserRemainingAnnualInfoService(IUserRemainingAnnualInfoRepository userRemainingAnnInfoRepository,  IUserRepository userRepository, IUserAnnualReportInfoRepository reportInfoRepository) {
 		this.userRemainingAnnInfoRepository = userRemainingAnnInfoRepository;
 		this.userRepository = userRepository;
+		this.reportInfoRepository=reportInfoRepository;
 	}
 
 	@Override

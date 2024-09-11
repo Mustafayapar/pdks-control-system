@@ -11,8 +11,12 @@ import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 
 import java.time.LocalDateTime;
+import java.util.Collection;
 import java.util.List;
+import java.util.stream.Collectors;
 
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.web.bind.annotation.CrossOrigin;
 
 @Entity
@@ -189,4 +193,14 @@ public class Users {
     public void setEmail(String email) {
         this.email = email;
     }
+
+	public Users orElseThrow(Object object) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public Collection<? extends GrantedAuthority> getAuthorities() {
+        return List.of(new SimpleGrantedAuthority(userRole.getCodeConstant().getName()));
+	}
+	
 }

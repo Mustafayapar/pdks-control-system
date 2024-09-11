@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 
 import com.onbiron.onbironpdks.entities.CodeConstant;
 import com.onbiron.onbironpdks.entities.UserRole;
+import com.onbiron.onbironpdks.enums.ParentIdType;
 import com.onbiron.onbironpdks.interfaceservices.ICodeConstantService;
 import com.onbiron.onbironpdks.repositories.ICodeConstantRepository;
 
@@ -126,10 +127,10 @@ public class CodeConstantService implements ICodeConstantService {
 	}
 
 	@Override
-	public List<CodeConstant> getByParentIdCodeConstant(Long parentId) {
+	public List<CodeConstant> getByParentIdCodeConstant(long parentId) {
 		 try {
 		        // Retrieve the CodeConstant records by parentId
-		       List<CodeConstant> codeConstants = codeConstantRepository.findByParentId(parentId);
+		       List<CodeConstant> codeConstants = codeConstantRepository.findByParentIdAndIsDeleted( parentId,false);
 
 		        if (codeConstants != null) {
 		            logger.info("Returning CodeConstants for Parent ID {}", parentId);
@@ -166,6 +167,12 @@ public class CodeConstantService implements ICodeConstantService {
 		String cleanedSearchTerm = searchTerm.trim();
         return codeConstantRepository.searchByTerm( cleanedSearchTerm);	
 
+	}
+
+	@Override
+	public List<CodeConstant> getByParentIdsCodeConstant(List<Long> parentIds) {
+		  
+        return codeConstantRepository.findByParentIdsAndIsDeleted(parentIds,false);
 	}
 
 

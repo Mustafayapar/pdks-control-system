@@ -7,13 +7,15 @@ import org.springframework.data.domain.Page;
 
 import com.onbiron.onbironpdks.entities.EmployeeEntryExit;
 import com.onbiron.onbironpdks.entities.UserRole;
+import com.onbiron.onbironpdks.enums.ParentIdType;
 
 public interface IUserRoleService {
 	
 	public Page<UserRole> getAllUserPageS(int page, int rowsPerPage );
+	
 	 public List<UserRole> search(String searchTerm);
 	
-	 public List<UserRole> getUsersByRoleIdS(Long roleId);
+	 public List<UserRole> getUsersByRoleIdS(long parentId);
 	 
 	 public List<UserRole> getUserRoleAllS();
 	 
@@ -21,7 +23,7 @@ public interface IUserRoleService {
 	 
 	 public UserRole deleteUserRoleS(Long userRoleId);
 	 
-	 public UserRole  updateById(Long id, UserRole newUserRole);
+	 public UserRole  updateById(Long id,Map<String, Object> payload);
 	 
 	 public UserRole getByUserId(Long userId);
 	 

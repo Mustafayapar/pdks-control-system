@@ -131,16 +131,16 @@ public class EmployeeEntryExitService implements IEmployeeEntryExitService{
 	}
 
 	@Override
-	public EmployeeEntryExit updateByEntryExitIdS(Long id, EmployeeEntryExit neEmployeeEntryExit) {
+	public EmployeeEntryExit updateByEntryExitIdS(Long id, EmployeeEntryExit newEmployeeEntryExit) {
 		EmployeeEntryExit existingEntryExit = employeeEntryExitRepository.findById(id)
 	            .orElseThrow(() -> new RuntimeException("EmployeeEntryExit not found with id: " + id));
 
 	    // Update the fields of the existing record with new values
-	    existingEntryExit.setId(neEmployeeEntryExit.getId());
-	    existingEntryExit.setUserId(neEmployeeEntryExit.getUserId());
-	    existingEntryExit.setEntryExitDatetime(neEmployeeEntryExit.getEntryExitDatetime());
-	    existingEntryExit.setCreationTime(neEmployeeEntryExit.getCreationTime());
-	    existingEntryExit.setEntryExitType(neEmployeeEntryExit.getEntryExitType()); // Replace with actual field names
+	    existingEntryExit.setId(newEmployeeEntryExit.getId());
+	    existingEntryExit.setUserId(newEmployeeEntryExit.getUserId());
+	    existingEntryExit.setEntryExitDatetime(newEmployeeEntryExit.getEntryExitDatetime());
+	    existingEntryExit.setCreationTime(newEmployeeEntryExit.getCreationTime());
+	    existingEntryExit.setEntryExitType(newEmployeeEntryExit.getEntryExitType()); // Replace with actual field names
 
 	    // Save the updated record
 	    return employeeEntryExitRepository.save(existingEntryExit);
